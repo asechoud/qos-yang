@@ -6,7 +6,7 @@ module ietf-qos-oper {
   import ietf-yang-types {
     prefix yang;
     reference
-      "RFC 6991:Common YANG Data Types.";
+      "RFC 9911:Common YANG Data Types.";
   }
   import ietf-interfaces {
     prefix if;
@@ -26,7 +26,7 @@ module ietf-qos-oper {
     "WG Web:   <http://tools.ietf.org/wg/rtgwg/>
      WG List:  <mailto:rtgwg@ietf.org>
      Editor:   Aseem Choudhary
-               <mailto:achoudhary@aviatrix.com>
+               <mailto:asechoud@cisco.com>
      Editor:   Mahesh Jethanandani
                <mailto:mjethanandani@gmail.com>";
   description
@@ -53,14 +53,14 @@ module ietf-qos-oper {
       "RFC XXXX: YANG Models for Quality of Service (QoS).";
   }
 
-  grouping classifier-statistics {
+  grouping classifier-stats {
     description
       "Statistics for a classifier.";
 
     leaf name {
       type string;
       description
-        "A unique identifier for Classifier name.";
+        "A identifier for Classifier name.";
     }
 
     leaf classified-pkts {
@@ -90,7 +90,7 @@ module ietf-qos-oper {
     leaf queue-id {
       type string;
       description
-        "A unique identifier for the Queue.";
+        "A identifier for the Queue.";
     }
 
     leaf transmit-pkts {
@@ -250,7 +250,7 @@ module ietf-qos-oper {
     leaf meter-id {
       type string;
       description
-        "A unique identifier that identifies this set of metering
+        "A identifier that identifies this set of metering
          statistics.";
     }
 
@@ -363,7 +363,7 @@ module ietf-qos-oper {
           description
             "Statistics for each Classifier in a
              Policy applied in a particular direction.";
-          uses classifier-statistics;
+          uses classifier-stats;
         }
 
         list named {
@@ -411,7 +411,7 @@ module ietf-qos-oper {
               description
                 "Statistics for each Classifier in a
                  Policy applied in a particular direction.";
-              uses classifier-statistics;
+              uses classifier-stats;
             }
 
             list metering {

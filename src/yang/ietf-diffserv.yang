@@ -26,13 +26,13 @@ module ietf-diffserv {
      WG List:  <mailto:rtgwg@ietf.org>
 
      Editor:   Aseem Choudhary
-               <mailto:achoudhary@aviatrix.com>
+               <mailto:asechoud@cisco.com>
      Editor:   Mahesh Jethanandani
                <mailto:mjethanandani@gmail.com>";
 
   description
     "This module contains a collection of YANG definitions for
-     configuring DiffServ specification implementations.
+     configuring Diffserv specification implementations.
 
      Copyright (c) 2023 IETF Trust and the persons identified as
      authors of the code.  All rights reserved.
@@ -323,7 +323,7 @@ module ietf-diffserv {
       }
     }
     description
-      "Augments QoS classifier to add in DiffServ filters.";
+      "Augments QoS classifier to add in Diffserv filters.";
   }
 
   augment "/traffic-policy:policies/traffic-policy:policy" +
@@ -336,7 +336,7 @@ module ietf-diffserv {
          "derived-from-or-self(../../../traffic-policy:type, " +
          "'qos-types:diffserv-policy-type')" {
       description
-        "If policy type is v4, v6 or default DiffServ,
+        "If policy type is v4, v6 or default Diffserv,
          this filter can be used.";
     }
     choice filter-params {
@@ -439,7 +439,7 @@ module ietf-diffserv {
          "derived-from-or-self(../../traffic-policy:type, " +
          "'qos-types:diffserv-policy-type')" {
       description
-        "If policy type is v4, v6 or default DiffServ,
+        "If policy type is v4, v6 or default Diffserv,
          these actions can be used.";
     }
     description
@@ -470,14 +470,14 @@ module ietf-diffserv {
         uses qos-action:child-policy;
       }
 
-      case count {
-        if-feature qos-types:count;
-        uses qos-action:count;
+      case qos-count {
+        if-feature qos-types:qos-count;
+        uses qos-action:qos-count;
       }
 
-      case named-count {
-        if-feature qos-types:named-counter;
-        uses qos-action:named-counter;
+      case named-qos-count {
+        if-feature qos-types:named-qos-count;
+        uses qos-action:named-qos-count;
       }
 
       case queue-inline {

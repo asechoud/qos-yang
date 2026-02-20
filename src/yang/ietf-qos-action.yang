@@ -6,7 +6,7 @@ module ietf-qos-action {
   import ietf-inet-types {
     prefix inet;
     reference
-      "RFC 6991: Common YANG Data Types";
+      "RFC 9911: Common YANG Data Types";
   }
   import ietf-qos-types {
     prefix qos-types;
@@ -22,7 +22,7 @@ module ietf-qos-action {
      WG List:  <mailto:rtgwg@ietf.org>
 
      Editor:   Aseem Choudhary
-               <mailto:achoudhary@aviatrix.com>
+               <mailto:asechoud@cisco.com>
      Editor:   Mahesh Jethanandani
                <mailto:mjethanandani@gmail.com>";
 
@@ -101,7 +101,7 @@ module ietf-qos-action {
            action-mark.";
       }
       description
-        "A unique name to mark as a traffic group.";
+        "A name to mark as a traffic group.";
     }
   }
 
@@ -313,7 +313,7 @@ module ietf-qos-action {
       leaf name {
         type string;
         description
-          "A unique string to identify the meter.";
+          "A name to identify the meter.";
       }
       uses meter;
     }
@@ -346,35 +346,35 @@ module ietf-qos-action {
       "Grouping to define meter reference.";
   }
 
-  grouping count {
-    container count {
-    if-feature qos-types:count;
+  grouping qos-count {
+    container qos-count {
+    if-feature qos-types:qos-count;
 
-      leaf count-action {
+      leaf qos-count-action {
         type empty;
         description
           "Take an action if this is defined.";
       }
       description
-        "Container for whether to take an action for count.";
+        "Container for whether to take an action for QoS count.";
     }
     description
-      "The count action grouping.";
+      "The qos-count action grouping.";
   }
 
-  grouping named-counter {
-    container named-counter {
-    if-feature qos-types:named-counter;
-      leaf count-name-action {
+  grouping named-qos-count {
+    container named-qos-count {
+    if-feature qos-types:named-qos-count;
+      leaf name {
         type string;
         description
-          "A unique name for named counter.";
+          "A name for named QoS count.";
       }
       description
-        "The named counter action.";
+        "The named traffic counter action.";
     }
     description
-      "The named counter action grouping.";
+      "The named traffic counter action grouping.";
   }
 
   grouping discard {
@@ -434,7 +434,7 @@ module ietf-qos-action {
       leaf traffic-group {
         type string;
         description
-          "A unique name for traffic group.";
+          "A name for traffic group.";
       }
       description
         "Container for traffic group marking container.";
@@ -449,7 +449,7 @@ module ietf-qos-action {
       leaf name {
         type string;
         description
-          "A unique name for hierarchical policy.";
+          "A name for hierarchical policy.";
       }
       description
         "Hierarchical Policy configuration container.";
@@ -715,7 +715,7 @@ module ietf-qos-action {
       leaf name {
         type string;
         description
-          "A unique name identifying this queue template";
+          "A name identifying this queue template";
       }
       uses queue;
     }

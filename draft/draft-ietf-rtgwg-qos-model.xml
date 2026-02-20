@@ -10,7 +10,7 @@
 <!ENTITY RFC2474 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2474.xml">
 <!ENTITY RFC2475 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2475.xml">
 <!ENTITY RFC6020 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6020.xml">
-<!ENTITY RFC6991 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6991.xml">
+<!ENTITY RFC9911 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.9911.xml">
 <!ENTITY RFC7950 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7950.xml">
 <!ENTITY RFC8174 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml">
 <!ENTITY RFC8343 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8343.xml">
@@ -53,22 +53,22 @@
     <title abbrev="YANG Models for QoS">YANG Models for Quality of Service (QoS) in IP networks</title>
 
     <author fullname="Aseem Choudhary" initials="A." surname="Choudhary">
-      <organization>Aviatrix Systems</organization>
+      <organization>Cisco Systems</organization>
 
       <address>
         <postal>
-          <street>2901 Tasman Drive #109</street>
+          <street>170 W Tasman Dr</street>
 
-          <city>Santa Clara</city>
+          <city>San Jose</city>
 
           <region>CA</region>
 
-          <code>95054</code>
+          <code>95134</code>
 
           <country>US</country>
         </postal>
 
-        <email>achoudhary@aviatrix.com</email>
+        <email>asechoud@cisco.com</email>
       </address>
     </author>
 
@@ -130,9 +130,9 @@
 	classifier, policy and target. QoS Action module defines QoS
 	action related parameters. Traffic policy is augmented to
 	include packet match and action parameters to define the
-	Differentiated Services (DiffServ) policy, Queues policy and
+	Differentiated Services (Diffserv) policy, Queues policy and
 	Scheduler policy. Each of these policies are defined as
-	separate modules. The DiffServ module is based on DiffServ
+	separate modules. The Diffserv module is based on Diffserv
 	architecture, and various references have been made to
 	available standard architecture documents. QoS statistics
 	counters are defined in QoS Operational module.
@@ -140,12 +140,12 @@
 
       <t>
 	While there are other approaches to offering QoS services,
-	this document focuses on DiffServ as the approach for
+	this document focuses on Diffserv as the approach for
 	providers to offer services to different customers based on
 	their network QoS objectives. The traffic streams are
-	differentiated based on DiffServ Code Points (DSCP) carried in
+	differentiated based on Diffserv Code Points (DSCP) carried in
 	the IP header of each packet. The DSCP markings are applied by
-	upstream node or by the edge router on entry to the DiffServ
+	upstream node or by the edge router on entry to the Diffserv
 	network.
       </t>
 
@@ -212,7 +212,7 @@
 	    direction.</li>
 	    <li>DS code point: A specific value of the DSCP portion of
 	    the DS field, used to select a PHB.</li>
-	    <li>DiffServ: Differentiated Services enhancements to
+	    <li>Diffserv: Differentiated Services enhancements to
 	    the Internet protocol are intended to enable scalable
 	    service discrimination in the Internet without the need
 	    for per-flow state and signaling at every hop.  A
@@ -247,10 +247,14 @@
 	    discarding packets (by a dropper) within a traffic stream
 	    in accordance with the state of a corresponding meter
 	    enforcing a traffic profile.</li>
+	    <li>Policy: A set of rules each with a set of conditions
+	    and a set of actions.</li>
 	    <li>RED: Random Early Detection</li>
 	    <li>Shaping: the process of delaying packets within a
 	    traffic stream to cause it to conform to some defined
 	    traffic profile.</li>
+	    <li>Target: The network physical or logical element (e.g.,
+	    interface or device) where a policy is applied.</li>
 	    <li>Traffic-Group: a logical collection of packets or
 	    flows that share similar service requirements and are
 	    treated collectively for traffic management purposes,
@@ -265,10 +269,10 @@
     <section title="QoS Model Design">
       <t> The overall objective of this model design is to offer a
       base set of modules that can then be further augmented to
-      provide other models, such as Differentiated Services (DiffServ)
+      provide other models, such as Differentiated Services (Diffserv)
       and Policy Based Routing (PBR). Those models would augment the
       base modules defined in this draft to define their own
-      model. This document defines one such model, DiffServ. The
+      model. This document defines one such model, Diffserv. The
       design also takes into consideration that vendors might want to
       extend the model to add their own extensions, such as the
       Traffic Policy module, to provide constructs of policy for
@@ -279,7 +283,7 @@
         <artwork>
          -------------   ------------   ------------   ------------
         |             | |            | |            | |            |
-        | DiffServ    | | Queue      | | Scheduling | | QoS        |
+        | Diffserv    | | Queue      | | Scheduling | | QoS        |
         | Policy      | | Policy     | | Policy     | | Oper       |
         |             | |            | |            | |            |
          -------------   ------------   ------------   ------------
@@ -292,7 +296,7 @@
         </artwork>
       </figure>
 
-      <t> The above diagram depicts the design of the QoS model. It
+      <t> The above figure depicts the design of the QoS model. It
       uses Traffic Policy and QoS Action as base modules, which are
       augmented by the remaining modules on the top to define
       different aspects of QoS.</t>
@@ -308,8 +312,8 @@
       filters may be based on a combination of values or range of
       values of different packet header fields or packet metadata
       fields. An example of how these filter definitions are used can
-      be seen in the DiffServ model. The DiffServ model augments the
-      filter node in the Classifier to add in DiffServ specific filter
+      be seen in the Diffserv model. The Diffserv model augments the
+      filter node in the Classifier to add in Diffserv specific filter
       parameters.</t>
 
       <t>One or more packet conditioning functions may be applied
@@ -321,7 +325,7 @@
 
       <t>The QoS Action module defines marking, metering and
       queuing. QoS actions are configured in line or referred to in
-      DiffServ, Queuing, and Scheduling Policy modules.</t>
+      Diffserv, Queuing, and Scheduling Policy modules.</t>
 
       <t>A Meter meters each packet and passes the packet and the
       metering result to the Marker. Meter is modeled based on
@@ -339,31 +343,41 @@
       <t> Scheduling Policy module defines a set of scheduling
       parameters and associates Queue Policy with it.</t>
 
-      <t>QoS counters are defined in QoS Operational module. It includes
-      counters for Classifiers, Meters and Queues associated with a QoS
-      policy applied in each direction of traffic. To modularize and for
-      reusability, grouping have been defined for various counters of
-      Classifier, Meters and Queues.  The target is assumed to be
-      interface but the groupings can be used for any other target
-      type where QoS policy is applied.</t>
+      <t>QoS counters are defined in QoS Operational module. It
+      includes counters for Classifiers, Meters and Queues associated
+      with a QoS policy applied in each direction of traffic. To
+      modularize and for reusability, grouping have been defined for
+      various counters of Classifier, Meters and Queues. The target
+      is assumed to be interface but the groupings can be used for any
+      other target type where QoS policy is applied.</t>
+
+      <t>In addition, QoS type module is defined which serves as the
+      central repository for shared identities, groupings, and
+      typedefs utilized across the entire QoS model. It defines the
+      fundamental building blocks such as traffic direction, rate
+      units, and filter types that ensure consistency between the
+      other functional modules and future extensibility.</t>
     </section>
 
-    <section title="DiffServ Model Design">
+    <section title="Diffserv Model Design">
       <t><xref target="RFC2475">Definition of the Differentiated
       Services Field (DS Field) in the IPv4 and IPv6 Headers</xref>
       describes the architecture as a simple model where traffic
       entering a network is classified and possibly conditioned at the
       boundary of the network and assigned a different Behavior
       Aggregate (BA). Each BA is identified by a specific value of
-      DSCP, and is used to select a Per Hop Behavior (PHB).</t>
+      DSCP, and is used to select a Per Hop Behavior (PHB) at the edge
+      node as well as at the core of a DS domain. A single
+      DSCP (for a BA) may be mapped to a different PHB at each node
+      in the network and multiple DSCPs may map to the same PHB.</t>
 
       <t>The packet classification policy identifies the subset of
-      traffic which may receive a DiffServ by being conditioned or
+      traffic which may receive a Diffserv by being conditioned or
       mapped. Packet classifiers select packets within a stream based
       on the content of some portion of the packet header. There are
       two types of classifiers, the BA classifier, and the Multi-Field
       (MF) classifier which selects packets based on a value which is
-      combination of one or more header fields. In the DiffServ Policy
+      combination of one or more header fields. In the Diffserv Policy
       module, this is realized by augmenting the classifier in
       Traffic Policy module.</t>
 
@@ -377,7 +391,7 @@
       action module. The metering parameters are augmented to the QoS
       policy module when metering is defined inline, and to the
       metering template when metering profile is referred in policy
-      module. </t>
+      module.</t>
 
       <section title="A Single Rate Three Color Marker">
 	<t>This document defines support for <xref target="RFC2697">A
@@ -410,7 +424,7 @@
     <section title="YANG Modules">
       <t>
       Modules defined in this draft import definitions from <xref
-      target="RFC6991">Common YANG Data Types</xref> and <xref
+      target="RFC9911">Common YANG Data Types</xref> and <xref
       target="RFC8343">A YANG Data Model for Interface
       Management</xref>.
       </t>
@@ -419,7 +433,10 @@
 
 	<t>Traffic Policy module contains list of classifiers
 	identified by a classifier name. Each classifier MAY contain a
-	list of filters.</t>
+	list of filters. While a single filter is sufficient for
+	simple classification, like one would expect at a core interface,
+	while a list allows for more sophisticated network logic as one
+	would expect at the ingress edge interface.</t>
 
 	<t>This module also contains list of policy objects identified
 	by a policy name and policy type which MUST be
@@ -433,7 +450,15 @@
 	<t>The module also augments <xref target="RFC8343">A YANG Data
 	Model for Interface Management</xref> module to add a target
 	policy. A single policy of a particular policy-type can be
-	applied on an interface in each direction of traffic.</t>
+	applied on an interface in each direction of traffic. </t>
+
+        <t>Below figure presents the tree diagram for the
+       ietf-traffic-policy module. This module serves as the central
+       framework for the QoS model, defining how classifiers
+       are associated with actions (traffic treatment) within a policy.
+       It also includes the qos-target-policy, which facilitates the
+       attachment of these policies to specific network targets, such
+       as interfaces, in either an inbound or outbound direction.</t>
 
 	<figure>
 	  <name>ietf-traffic-policy abridged tree diagram</name>
@@ -456,8 +481,16 @@
 	<t>QoS Action module includes actions such marking, metering,
 	or queuing. Metering, marking, queuing, and scheduling actions
 	are realized by augmenting the Traffic Policy module. Marking
-	sets DiffServ codepoint value in the classified
-	packet.</t>
+	sets Diffserv codepoint value in the classified packet.</t>
+
+        <t> Below Figure depicts the tree diagram for the
+        ietf-qos-action module. This module defines the common set of
+        actions that can be applied to traffic once it has been
+        classified. These actions include fundamental QoS operations
+        such as marking (setting DSCP or precedence values), metering,
+        and counting. The structure is designed to be extensible,
+        allowing for the addition of new action types as required by
+        specific hardware capabilities.</t>
 
 	<figure>
 	  <name>ietf-qos-actions abridged tree diagram</name>
@@ -466,19 +499,19 @@
 	  ]]></artwork>
 	</figure>
 
-        <figure>
+	<figure>
 	  <name>ietf-qos-actions module</name>
           <artwork><![CDATA[
 	  <CODE BEGINS>file "ietf-qos-action@YYYY-MM-DD.yang"
 	  INSERT_TEXT_FROM_FILE(../bin/ietf-qos-action@YYYY-MM-DD.yang)
 	  <CODE ENDS>
 	  ]]></artwork>
-        </figure>
+	</figure>
       </section>
 
-      <section title="DiffServ Module">
-	<t>DiffServ module augments Traffic Policy module to enable
-  diffrentiated services for different types of packets.</t>
+      <section title="Diffserv Module">
+	<t>Diffserv module augments Traffic Policy module to enable
+        diffrentiated services for different types of packets.</t>
 
 	<figure>
 	  <name>ietf-diffserv abridged tree diagram</name>
@@ -500,7 +533,7 @@
       <section title="QoS Operational Module">
 	<t>QoS Operational module contains all operational
 	statistics. It contains statistics related to classifier,
-	metering, queueing, and named.</t>
+	metering, queueing.</t>
 
 	<t>Classifier statistics consist of list of classifier entries
 	identified by a classifier entry name.  Classifier counters
@@ -515,16 +548,25 @@
 	length, as well as output conform, exceed, tail drop packets
 	and bytes.</t>
 
-	<t>Named statistics is defined as statistics which is tagged
-	by a name.  This could be aggregated or non-aggregated.
-	Aggregated named statistics is defined as counters which are
-	aggregated across classifier entries in a policy applied to an
-	interface in a particular direction.  Non-aggregated named
-	statistics are counters of classifier, metering or queuing
-	which have the same tag name but maintained separately.</t>
+	<t>In addition, Named statistics is defined as statistics
+	which is tagged by a name.  This could be aggregated or
+	non-aggregated. Aggregated named statistics is defined as
+	counters which are aggregated across classifier entries in a
+	policy applied to an interface in a particular direction.
+	Non-aggregated named statistics are counters of classifier,
+	metering or queuing which have the same tag name but counts
+	are maintained separately.</t>
 
 	<t>A clear action is provided to clear all statistics
   or statistics of a particular kind.</t>
+
+       <t> Below Figure shows the tree structure for the
+       ietf-qos-operational module. This module is dedicated to
+       providing visibility into the real-time performance of QoS
+       policies. It contains operational state data and statistics,
+       organized by classifier, meter, and queue. This includes
+       'named' counters, which allow operators to track traffic
+       statistics across selected classifiers, meters and wueues.</t>
 
 	<figure>
 	  <name>ietf-qos-oper abridged tree diagram</name>
@@ -566,6 +608,15 @@
 	augments to allow queues to be referred to in a policy. The
 	match is based on Traffic Group and action parameters which
 	are defined in QoS Action module.</t>
+
+        <t> Below Figure provides the tree diagram for the
+        ietf-queue-policy module. This module describes the mechanisms
+        used for managing congestion. It includes configurations for
+        queue buffers, scheduling algorithms (such as Strict Priority
+        or Weighted Round Robin), and drop policies (such as Tail Drop
+        or Weighted Random Early Detection). The model supports nested
+        scheduling structures to accommodate complex hierarchical QoS
+        requirements.</t>
 
 	<figure>
 	  <name>ietf-queue-policy abridged tree diagram</name>
@@ -786,7 +837,7 @@
 
       &RFC6020;
 
-      &RFC6991;
+      &RFC9911;
 
       &RFC7950;
 
@@ -831,9 +882,9 @@
 	        ]]></artwork>
         </figure>
       </section>
-      <section title="DiffServ Module Tree Diagram">
+      <section title="Diffserv Module Tree Diagram">
         <figure>
-	        <name>DiffServ Module Tree Diagram</name>
+	        <name>Diffserv Module Tree Diagram</name>
           <artwork><![CDATA[
 	        INSERT_TEXT_FROM_FILE(../bin/ietf-diffserv@YYYY-MM-DD-tree.txt)
 	        ]]></artwork>
@@ -866,30 +917,32 @@
     </section>
 
     <section title="Company A and Company B examples">
-      <t>Company A and Company B DiffServ modules augments all the filter types of the QoS
+      <t>Company A and Company B Diffserv modules augments all the filter types of the QoS
       Classifier module as well as the QoS Policy module that allow it to
       define marking, metering, min-rate, max-rate actions. Queueing and
       metering counters are realized by augmenting of the QoS Target
       module.</t>
 
-      <section title="Example of Company A DiffServ Model">
-      <t> The following Company A vendor example augments the QoS and DiffServ model,
+      <section title="Example of Company A Diffserv Model">
+      <t> The following Company A vendor example augments the QoS and Diffserv model,
 demonstrating some of the following functionality:
       </t>
         <t>- use of template based classifier definitions </t>
         <t>- use of single policy type modelling queue, scheduler
    policy, and a filter policy. All of these policies either augment
-   the QoS policy or the DiffServ modules</t>
+   the QoS policy or the Diffserv modules</t>
         <t>- use of inline actions in a policy</t>
         <t>- flexibility in marking dscp or metadata at ingress and/or egress. </t>
         <figure>
           <artwork><![CDATA[
+	  <CODE BEGINS> file "example-compa-diffserv@YYYY-MM-DD.yang"
 INSERT_TEXT_FROM_FILE(../bin/example-compa-diffserv@YYYY-MM-DD.yang)
+	  <CODE ENDS>
     ]]></artwork>
         </figure>
       </section>
-      <section title="Example of Company B DiffServ Model">
-      <t> The following vendor example augments the QoS and DiffServ model,
+      <section title="Example of Company B Diffserv Model">
+      <t> The following vendor example augments the QoS and Diffserv model,
 demonstrating some of the following functionality:
       </t>
  
@@ -897,20 +950,28 @@ demonstrating some of the following functionality:
    vs referencing an externally defined classifier)</t>
         <t>- use of mulitple policy types, e.g. a queue policy, a scheduler
    policy, and a filter policy. All of these policies either augment
-   the QoS policy or the DiffServ modules</t>
+   the QoS policy or the Diffserv modules</t>
         <t>- use of a queue module, which uses and extends the queue grouping
    from the QoS Action module</t>
         <t>- use of meter templates (v.s. meter inline)</t>
         <t>- use of internal meta data for classification and marking</t>
         <figure>
           <artwork><![CDATA[
+	  <CODE BEGINS> file "example-compb-diffserv-filter-policy@YYYY-MM-DD.yang"
 INSERT_TEXT_FROM_FILE(../bin/example-compb-diffserv-filter-policy@YYYY-MM-DD.yang)
+	  <CODE ENDS>
 
+	  <CODE BEGINS> file "example-compb-queue-policy@YYYY-MM-DD.yang"
 INSERT_TEXT_FROM_FILE(../bin/example-compb-queue-policy@YYYY-MM-DD.yang)
+	  <CODE ENDS>
 
+	  <CODE BEGINS> file "example-compb-queue@YYYY-MM-DD.yang"
 INSERT_TEXT_FROM_FILE(../bin/example-compb-queue@YYYY-MM-DD.yang)
+	  <CODE ENDS>
 
+	  <CODE BEGINS> file "example-compb-scheduler-policy@YYYY-MM-DD.yang"
 INSERT_TEXT_FROM_FILE(../bin/example-compb-scheduler-policy@YYYY-MM-DD.yang)
+	  <CODE ENDS>
     ]]></artwork>
         </figure>
       </section>
