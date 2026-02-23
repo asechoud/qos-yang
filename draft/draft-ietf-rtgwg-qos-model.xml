@@ -9,11 +9,11 @@
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY RFC2474 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2474.xml">
 <!ENTITY RFC2475 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2475.xml">
-<!ENTITY RFC6020 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6020.xml">
-<!ENTITY RFC9911 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.9911.xml">
 <!ENTITY RFC7950 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7950.xml">
 <!ENTITY RFC8174 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml">
 <!ENTITY RFC8343 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8343.xml">
+<!ENTITY RFC8436 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8436.xml">
+<!ENTITY RFC9911 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.9911.xml">
 ]>
 <rfc
     category="std"
@@ -128,11 +128,11 @@
 	operational parameters as they relate to IP networks. Traffic
 	Policy module defines the basic building blocks to define a
 	classifier, policy and target. QoS Action module defines QoS
-	action related parameters. Traffic policy is augmented to
-	include packet match and action parameters to define the
-	Differentiated Services (Diffserv) policy, Queues policy and
-	Scheduler policy. Each of these policies are defined as
-	separate modules. The Diffserv module is based on Diffserv
+	action related parameters. Differentiated Servicers (Diffserv)
+	policy, Queue policy and Schedular policy modules augments
+	Traffic policy with various packet match and action
+	parameters. Each of these policies are defined as separate
+	modules. The Diffserv module is based on Diffserv
 	architecture, and various references have been made to
 	available standard architecture documents. QoS statistics
 	counters are defined in QoS Operational module.
@@ -142,11 +142,12 @@
 	While there are other approaches to offering QoS services,
 	this document focuses on Diffserv as the approach for
 	providers to offer services to different customers based on
-	their network QoS objectives. The traffic streams are
-	differentiated based on Diffserv Code Points (DSCP) carried in
-	the IP header of each packet. The DSCP markings are applied by
+	their network QoS objectives. The DSCP markings are applied by
 	upstream node or by the edge router on entry to the Diffserv
-	network.
+	domain. The traffic streams are differentiated based on
+	Diffserv Code Points (DSCP) carried in the IP header of each
+	packet and per-hop-behavior according to the DSCP marking is
+	applied.
       </t>
 
       <t>
@@ -347,9 +348,13 @@
       includes counters for Classifiers, Meters and Queues associated
       with a QoS policy applied in each direction of traffic. To
       modularize and for reusability, grouping have been defined for
-      various counters of Classifier, Meters and Queues. The target
-      is assumed to be interface but the groupings can be used for any
-      other target type where QoS policy is applied.</t>
+      various counters of Classifier, Meters and Queues. Target refers
+      to the network element to which a traffic policy is applied and
+      is assumed to be a network logical or physical interface or
+      sub-interface. However, the groupings can be reused to define a
+      traffic policy which then can be applied to other logical or
+      physical entities such as a policy to form hierarchical
+      policies.</t>
 
       <t>In addition, QoS type module is defined which serves as the
       central repository for shared identities, groupings, and
@@ -377,8 +382,14 @@
       on the content of some portion of the packet header. There are
       two types of classifiers, the BA classifier, and the Multi-Field
       (MF) classifier which selects packets based on a value which is
-      combination of one or more header fields. In the Diffserv Policy
-      module, this is realized by augmenting the classifier in
+      combination of value or range of values of one or more header
+      fields. Diffserv domain gateway router classifies and remarks
+      packet to suit domain internal diffserv policy and here <xref
+      target="RFC8436">RFC8436</xref> must be respected. Diffserv
+      Domain internal routers may classify by ranges of DSCPs. This
+      allows keeping e.g. a backbone DS config simple and
+      comprehensible. In the Diffserv Policy module, this packet
+      classification is realized by augmenting the classifier in
       Traffic Policy module.</t>
 
       <t>Traffic conditioning includes metering, shaping and/or
@@ -512,6 +523,13 @@
       <section title="Diffserv Module">
 	<t>Diffserv module augments Traffic Policy module to enable
         diffrentiated services for different types of packets.</t>
+	<t>Below figure presents the tree diagram for the
+	ietf-diffserv module. This module augments the base
+	ietf-traffic-policy module to enable Differentiated Services
+	(Diffserv) for various packet types. It adds several filter
+	parameters to the traffic policy's classifiers, as well as,
+	various action parameters that can be applied within a
+	policy's classifier.</t>
 
 	<figure>
 	  <name>ietf-diffserv abridged tree diagram</name>
@@ -635,7 +653,7 @@
         </figure>
       </section>
 
-      <section title="IANA QoS Types Module">
+      <section title="IETF QoS Types Module">
 	<t>The QoS Types module contains all the type definitions used
 	by the other QoS modules.</t>
 
@@ -677,7 +695,7 @@
 
       <section title="YANG Module Name Registration">
         <t>This document registers seven YANG modules in the YANG
-        Module Names registry <xref target="RFC6020">YANG</xref>.</t>
+        Module Names registry <xref target="RFC7950">YANG</xref>.</t>
 
         <t><figure>
             <artwork><![CDATA[
@@ -835,8 +853,6 @@
 
       &RFC2119;
 
-      &RFC6020;
-
       &RFC9911;
 
       &RFC7950;
@@ -845,6 +861,7 @@
 
       <?rfc include='reference.RFC.8342.xml'?>
       <?rfc include='reference.RFC.8343.xml'?>
+      <?rfc include='reference.RFC.8436.xml'?>
     </references>
 
     <references title="Informative References">
