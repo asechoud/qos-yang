@@ -806,9 +806,10 @@
     </section>
 
     <section anchor="ack" title="Acknowledgement">
-    <t> The authors wish to thank Ruediger Geib, Fred Baker, Greg
-    Mirsky, Tom Petch, Acee Lindem, many others for their helpful
-    comments. </t>
+      <t>The authors wish to thank Ruediger Geib, Fred Baker, Greg
+      Mirsky, Tom Petch, Acee Lindem, Adrian Farrel, David Black,
+      Jurgen Schonwalder, Colin Perkins, Joseph Touch, Zaheduzzaman
+      Sarker many others for their helpful comments.</t>
     </section>
 
     <section anchor="contrib" title="Contributors">
