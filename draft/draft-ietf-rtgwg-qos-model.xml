@@ -9,6 +9,7 @@
 <!ENTITY RFC2119 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 <!ENTITY RFC2474 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2474.xml">
 <!ENTITY RFC2475 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2475.xml">
+<!ENTITY RFC6020 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.6020.xml">
 <!ENTITY RFC7950 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.7950.xml">
 <!ENTITY RFC8174 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8174.xml">
 <!ENTITY RFC8343 SYSTEM "http://xml.resource.org/public/rfc/bibxml/reference.RFC.8343.xml">
@@ -255,7 +256,7 @@
 	    traffic stream to cause it to conform to some defined
 	    traffic profile.</li>
 	    <li>Target: The network physical or logical element (e.g.,
-	    interface or device) where a policy is applied.</li>
+	    interface or device) where a Policy is applied.</li>
 	    <li>Traffic-Group: a logical collection of packets or
 	    flows that share similar service requirements and are
 	    treated collectively for traffic management purposes,
@@ -348,16 +349,15 @@
       includes counters for Classifiers, Meters and Queues associated
       with a QoS policy applied in each direction of traffic. To
       modularize and for reusability, grouping have been defined for
-      various counters of Classifier, Meters and Queues. Target refers
-      to the network element to which a traffic policy is applied and
-      is assumed to be a network logical or physical interface or
-      sub-interface. However, the groupings can be reused to define a
-      traffic policy which then can be applied to other logical or
-      physical entities such as a policy to form hierarchical
-      policies.</t>
+      various counters of Classifier, Meters and Queues. A Traffic
+      Policy is applied to a Target. A Target is a network logical
+      or physical interface or sub-interface. However, the groupings
+      can be reused to define a traffic policy which then can be
+      applied to any logical or physical entities such as a Policy
+      to form hierarchical policies.</t>
 
-      <t>In addition, QoS type module is defined which serves as the
-      central repository for shared identities, groupings, and
+      <t>In addition, ietf-qos-types module is defined which serves
+      as the central repository for shared identities, groupings, and
       typedefs utilized across the entire QoS model. It defines the
       fundamental building blocks such as traffic direction, rate
       units, and filter types that ensure consistency between the
@@ -372,9 +372,27 @@
       boundary of the network and assigned a different Behavior
       Aggregate (BA). Each BA is identified by a specific value of
       DSCP, and is used to select a Per Hop Behavior (PHB) at the edge
-      node as well as at the core of a DS domain. A single
-      DSCP (for a BA) may be mapped to a different PHB at each node
-      in the network and multiple DSCPs may map to the same PHB.</t>
+      node as well as at the core of a DS domain. In a
+      DiffServ-compliant node, the PHB is selected based on the
+      DSCP value found in the IP header of an incoming packet.
+      Specifically, a Behavior Aggregate (BA) classifier is used to
+      map the DSCP to a particular PHB, which determines the
+      externally observable forwarding treatment the packet receives
+      at that hop. The mapping of a DSCP to a PHB is local to each
+      node. While a single DSCP identifies a Behavior Aggregate (BA)
+      across the network, different nodes may be configured to apply
+      different PHBs to that same BA based on local policy and
+      resource availability. Multiple DSCP values can be mapped to
+      the same PHB at a single node. This allows for a simplified
+      core configuration where various traffic streams (identified
+      by different DSCPs at the edge) receive the same forwarding
+      treatment within the backbone. This YANG model facilitates
+      this by allowing the DiffServ module to augment the base
+      Traffic Policy module. This enables the configuration of
+      classifiers (like the BA classifier) that select packets based
+      on DSCP ranges and associate them with specific actions (PHBs),
+      such as marking, metering, or queuing, at each network interface.
+      </t>
 
       <t>The packet classification policy identifies the subset of
       traffic which may receive a Diffserv by being conditioned or
@@ -463,7 +481,7 @@
 	policy. A single policy of a particular policy-type can be
 	applied on an interface in each direction of traffic. </t>
 
-        <t>Below figure presents the tree diagram for the
+        <t>The figure below presents the tree diagram for the
        ietf-traffic-policy module. This module serves as the central
        framework for the QoS model, defining how classifiers
        are associated with actions (traffic treatment) within a policy.
@@ -494,7 +512,7 @@
 	are realized by augmenting the Traffic Policy module. Marking
 	sets Diffserv codepoint value in the classified packet.</t>
 
-        <t> Below Figure depicts the tree diagram for the
+        <t> The figure below depicts the tree diagram for the
         ietf-qos-action module. This module defines the common set of
         actions that can be applied to traffic once it has been
         classified. These actions include fundamental QoS operations
@@ -523,7 +541,7 @@
       <section title="Diffserv Module">
 	<t>Diffserv module augments Traffic Policy module to enable
         diffrentiated services for different types of packets.</t>
-	<t>Below figure presents the tree diagram for the
+	<t>The figure below presents the tree diagram for the
 	ietf-diffserv module. This module augments the base
 	ietf-traffic-policy module to enable Differentiated Services
 	(Diffserv) for various packet types. It adds several filter
@@ -578,8 +596,8 @@
 	<t>A clear action is provided to clear all statistics
   or statistics of a particular kind.</t>
 
-       <t> Below Figure shows the tree structure for the
-       ietf-qos-operational module. This module is dedicated to
+       <t> The figure below shows the tree structure for the
+       ietf-qos-oper module. This module is dedicated to
        providing visibility into the real-time performance of QoS
        policies. It contains operational state data and statistics,
        organized by classifier, meter, and queue. This includes
@@ -627,7 +645,7 @@
 	match is based on Traffic Group and action parameters which
 	are defined in QoS Action module.</t>
 
-        <t> Below Figure provides the tree diagram for the
+        <t> The figure below provides the tree diagram for the
         ietf-queue-policy module. This module describes the mechanisms
         used for managing congestion. It includes configurations for
         queue buffers, scheduling algorithms (such as Strict Priority
@@ -695,7 +713,7 @@
 
       <section title="YANG Module Name Registration">
         <t>This document registers seven YANG modules in the YANG
-        Module Names registry <xref target="RFC7950">YANG</xref>.</t>
+        Module Names registry <xref target="RFC6020">YANG</xref>.</t>
 
         <t><figure>
             <artwork><![CDATA[
@@ -855,6 +873,8 @@
       &RFC2119;
 
       &RFC9911;
+
+      &RFC6020;
 
       &RFC7950;
 
