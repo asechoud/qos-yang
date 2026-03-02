@@ -345,16 +345,16 @@
       <t> Scheduling Policy module defines a set of scheduling
       parameters and associates Queue Policy with it.</t>
 
-      <t>QoS counters are defined in QoS Operational module. It
-      includes counters for Classifiers, Meters and Queues associated
-      with a QoS policy applied in each direction of traffic. To
-      modularize and for reusability, grouping have been defined for
-      various counters of Classifier, Meters and Queues. A Traffic
-      Policy is applied to a Target. A Target is a network logical
-      or physical interface or sub-interface. However, the groupings
-      can be reused to define a traffic policy which then can be
-      applied to any logical or physical entities such as a Policy
-      to form hierarchical policies.</t>
+      <t>QoS counters are defined in QoS Operational (ietf-qos-oper)
+      module. It includes counters for Classifiers, Meters and Queues
+      associated with a QoS policy applied in each direction of
+      traffic. To modularize and for reusability, grouping have been
+      defined for various counters of Classifier, Meters and Queues.
+      A Traffic Policy is applied to a Target. A Target is a network
+      logical or physical interface or sub-interface. However, the
+      groupings can be reused to define a traffic policy which then
+      can be applied to any logical or physical entities such as a
+      Policy to form hierarchical policies.</t>
 
       <t>In addition, ietf-qos-types module is defined which serves
       as the central repository for shared identities, groupings, and
@@ -402,7 +402,7 @@
       (MF) classifier which selects packets based on a value which is
       combination of value or range of values of one or more header
       fields. Diffserv domain gateway router classifies and remarks
-      packet to suit domain internal diffserv policy and here <xref
+      packet to suit domain internal Diffserv policy and here <xref
       target="RFC8436">RFC8436</xref> must be respected. Diffserv
       Domain internal routers may classify by ranges of DSCPs. This
       allows keeping e.g. a backbone DS config simple and
@@ -464,8 +464,8 @@
 	identified by a classifier name. Each classifier MAY contain a
 	list of filters. While a single filter is sufficient for
 	simple classification, like one would expect at a core interface,
-	while a list allows for more sophisticated network logic as one
-	would expect at the ingress edge interface.</t>
+        a list of filters allows for more sophisticated logic to be
+        applied on the ingress edge nodes.</t>
 
 	<t>This module also contains list of policy objects identified
 	by a policy name and policy type which MUST be
@@ -481,13 +481,13 @@
 	policy. A single policy of a particular policy-type can be
 	applied on an interface in each direction of traffic. </t>
 
-        <t>The figure below presents the tree diagram for the
+       <t>The figure below presents the tree diagram for the
        ietf-traffic-policy module. This module serves as the central
-       framework for the QoS model, defining how classifiers
-       are associated with actions (traffic treatment) within a policy.
-       It also includes the qos-target-policy, which facilitates the
-       attachment of these policies to specific network targets, such
-       as interfaces, in either an inbound or outbound direction.</t>
+       framework for the QoS module, defining how Classifiers are
+       associated with Actions (traffic treatment) with a Policy.
+       It also includes the qos-target-poilcy, which facilitates the
+       attachment of these Policies to specific network Targets, such
+       as interfaces, in either the inbound or outbound direction.</t>
 
 	<figure>
 	  <name>ietf-traffic-policy abridged tree diagram</name>
@@ -514,10 +514,10 @@
 
         <t> The figure below depicts the tree diagram for the
         ietf-qos-action module. This module defines the common set of
-        actions that can be applied to traffic once it has been
+        Actions that can be applied to traffic once it has been
         classified. These actions include fundamental QoS operations
-        such as marking (setting DSCP or precedence values), metering,
-        and counting. The structure is designed to be extensible,
+        such as Marking (setting DSCP or precedence values), Metering,
+        and Queuing. The structure is designed to be extensible,
         allowing for the addition of new action types as required by
         specific hardware capabilities.</t>
 
@@ -602,7 +602,7 @@
        policies. It contains operational state data and statistics,
        organized by classifier, meter, and queue. This includes
        'named' counters, which allow operators to track traffic
-       statistics across selected classifiers, meters and wueues.</t>
+       statistics across selected classifiers, meters and queues.</t>
 
 	<figure>
 	  <name>ietf-qos-oper abridged tree diagram</name>
