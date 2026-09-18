@@ -183,14 +183,14 @@ module ietf-traffic-policy {
         }
 
         container inline {
-          presence "This container is present for when the device
-                    is configured for inline classification.";
           must "not(../name = /traffic-policy:classifiers"
              + "/traffic-policy:classifier/traffic-policy:name)" {
             error-message
               "When inline is specified, classifier name must not
                reference an existing classifier.";
           }
+          presence "This container is present for when the device
+                    is configured for inline classification.";
           uses inline-attr;
           description
             "Container for when an inline classification
