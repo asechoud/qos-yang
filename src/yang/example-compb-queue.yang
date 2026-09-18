@@ -34,7 +34,7 @@ module example-compb-queue {
     leaf name {
       type string;
       description
-        "A unique name identifying this queue";
+        "A name identifying this queue";
     }
     uses qos-action:queue;
     container excess-rate {

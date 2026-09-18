@@ -166,10 +166,10 @@ module example-compb-diffserv-filter-policy {
       description
         "Discard action.";
     }
-    case count {
-        uses qos-action:count;
+    case qos-count {
+        uses qos-action:qos-count;
       description
-        "Count action - explicit count configuration.";
+        "Traffic-count action - explicit qos-count configuration.";
     }
 
     description 
