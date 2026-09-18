@@ -13,6 +13,11 @@ module ietf-qos-action {
     reference
       "RFC XXXX: YANG Model for Quality of Service (QoS).";
   }
+  import ietf-traffic-policy {
+    prefix traffic-policy;
+    reference
+      "RFC XXXX: YANG Model for Quality of Service (QoS).";
+  }
 
   organization
     "IETF Routing Area Working Group";
@@ -53,9 +58,14 @@ module ietf-qos-action {
   grouping rate-value-unit {
     leaf value {
       type uint64;
+      must "not(../unit = 'qos-types:percent') or (. <= 100)" {
+        error-message
+          "When unit is percent, value must be 0-100.";
+      }
       description
         "Value for the rate that is configured, either in
-         bits-per-second or percentage.";
+         bits-per-second or percentage. When unit is percent,
+         value must not exceed 100.";
     }
 
     leaf unit {
@@ -447,12 +457,24 @@ module ietf-qos-action {
     container child-policy {
       if-feature qos-types:child-policy;
       leaf name {
-        type string;
+        type leafref {
+          path "/traffic-policy:policies/traffic-policy:policy"
+             + "/traffic-policy:name";
+        }
+        must "not(. = ../../../../traffic-policy:name)" {
+          error-message
+            "Child policy must not reference the containing policy "
+          + "(self-reference is not allowed).";
+        }
         description
-          "A name for hierarchical policy.";
+          "Reference to a hierarchical (child) policy. The referenced
+           policy must exist and must not be the same as the containing
+           policy (no self-reference). Implementations MUST also reject
+           configurations that would create cyclic policy chains.";
       }
       description
-        "Hierarchical Policy configuration container.";
+        "Hierarchical Policy configuration container. Used to apply
+         a nested policy within a classifier action.";
     }
     description
       "Grouping of Hierarchical Policy configuration.";

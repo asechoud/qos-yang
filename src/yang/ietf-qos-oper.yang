@@ -18,6 +18,11 @@ module ietf-qos-oper {
     reference
       "RFC XXXX: YANG Models for Quality of Service (QoS).";
   }
+  import ietf-netconf-acm {
+    prefix nacm;
+    reference
+      "RFC 8341: Network Configuration Access Control Model.";
+  }
 
 
   organization "IETF RTG (Routing Area) Working Group.";
@@ -451,10 +456,22 @@ module ietf-qos-oper {
       }
 
       action clear {
+        nacm:default-deny-all;
         description
           "Clear statistics action command. Execution of this command
            should result in all the QoS interface counters to be
-           cleared and set to 0.";
+           cleared and set to 0.
+
+           This action is marked with nacm:default-deny-all because
+           clearing counters can disrupt operational monitoring and
+           potentially hide evidence of traffic anomalies or attacks.
+           Operators should configure explicit NACM invoke rules to
+           control which users may execute this action.
+
+           If started-at specifies a time in the past, the server
+           SHOULD clear counters immediately. Implementations MAY
+           impose limits on how far in the future started-at may be
+           scheduled.";
 
         input {
           leaf category {
@@ -469,7 +486,9 @@ module ietf-qos-oper {
             type yang:date-and-time;
             description
               "The date and time when the counters should be
-               cleared.";
+               cleared. If not specified, counters are cleared
+               immediately. If specified in the past, counters
+               SHOULD be cleared immediately.";
           }
         }
 
