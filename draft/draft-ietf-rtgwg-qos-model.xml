@@ -51,7 +51,7 @@
   <?rfc compact="yes" ?>
 
   <front>
-    <title abbrev="YANG Models for QoS">YANG Models for Quality of Service (QoS) in IP networks</title>
+    <title abbrev="A YANG Data Model for QoS">A YANG Data Model for Quality of Service (QoS) in IP Networks</title>
 
     <author fullname="Aseem Choudhary" initials="A." surname="Choudhary">
       <organization>Cisco Systems</organization>
@@ -115,7 +115,7 @@
 
     <abstract>
       <t>
-	This document describes a YANG model for management of Quality
+	This document describes a YANG data model for management of Quality
 	of Service (QoS) in IP networks.
       </t>
     </abstract>
