@@ -167,10 +167,11 @@ module ietf-qos-oper {
         description
           "QoS WRED statistics.";
 
-        leaf profile {
+        leaf id {
           type uint8;
           description
-            "Profile identifier for each color of traffic.";
+            "WRED profile identifier corresponding to the id
+             in the wred-profile configuration.";
         }
 
         leaf drop-pkts {
@@ -414,7 +415,7 @@ module ietf-qos-oper {
               uses classifier-stats;
             }
 
-            list metering {
+            list meter {
               description
                 "Statistics for each Meter associated with
                  the Policy.";
@@ -424,7 +425,7 @@ module ietf-qos-oper {
               uses metering-stats;
             }
 
-            list queueing {
+            list queue {
               description
                 "Statistics for each Queue associated with
                  the Policy.";
@@ -433,7 +434,7 @@ module ietf-qos-oper {
           }
         }
 
-        list metering {
+        list meter {
           description
             "Statistics for each Meter associated with the Policy.";
           reference
@@ -442,7 +443,7 @@ module ietf-qos-oper {
           uses metering-stats;
         }
 
-        list queueing {
+        list queue {
           description
             "Statistics for each Queue associated with the Policy.";
           uses queuing-stats;

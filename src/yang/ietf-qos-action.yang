@@ -600,14 +600,18 @@ module ietf-qos-action {
           }
 
           case wred {
-            container wred {
-              list wred {
-                key "profile";
+            container wred-profiles {
+              list wred-profile {
+                key "id";
 
-                leaf profile {
+                leaf id {
                   type uint8;
                   description
-                    "Profile id of each WRED profile.";
+                    "Identifier for each WRED profile. Lower values
+                     indicate higher precedence when color ranges
+                     overlap. Packets matching overlapping color
+                     ranges are processed by the profile with the
+                     lowest id value.";
                 }
 
                 leaf color-type {
@@ -639,19 +643,21 @@ module ietf-qos-action {
                 }
                 uses red-config-parameters;
                 description
-                  "List of RED profiles each with its own
-                   threshold values.";
+                  "A WRED profile with its own threshold values.
+                   Multiple profiles can target different traffic
+                   colors with distinct drop parameters.";
               }
 
               leaf ecn-enabled {
                 type boolean;
                 default "false";
                 description
-                  "When configure as true, ECN is enabled on
+                  "When configured as true, ECN is enabled on
                    the queue.";
               }
               description
-                "Weighted Random Early Detect (WRED) configuration.";
+                "Weighted Random Early Detect (WRED) configuration
+                 containing one or more WRED profiles.";
             }
           }
 

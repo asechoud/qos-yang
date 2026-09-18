@@ -105,6 +105,7 @@ module ietf-traffic-policy {
 
     list filter {
       key "type logical-not";
+      min-elements 1;
       uses filters;
       description
         "Filters configured inline in a policy.";
@@ -168,23 +169,33 @@ module ietf-traffic-policy {
 
         leaf name {
           type union {
-            type string;
             type leafref {
               path "/traffic-policy:classifiers/" +
-              "traffic-policy:classifier/traffic-policy:name";
+                   "traffic-policy:classifier/traffic-policy:name";
             }
+            type string;
           }
           description
-            "A name for classifier entry.";
+            "A name for classifier entry. When the inline container
+             is present, this is a user-defined name for the inline
+             classifier. Otherwise, it references an existing
+             classifier defined in /classifiers/classifier.";
         }
 
         container inline {
           presence "This container is present for when the device
                     is configured for inline classification.";
+          must "not(../name = /traffic-policy:classifiers"
+             + "/traffic-policy:classifier/traffic-policy:name)" {
+            error-message
+              "When inline is specified, classifier name must not
+               reference an existing classifier.";
+          }
           uses inline-attr;
           description
             "Container for when an inline classification
-             is desired.";
+             is desired. When present, filters are defined inline
+             rather than referencing an existing classifier.";
         }
 
         list action {
