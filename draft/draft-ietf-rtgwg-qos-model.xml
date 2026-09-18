@@ -758,7 +758,10 @@
     </section>
 
     <section title="Security Considerations">
-      <t>The YANG module specified in this document defines a schema
+      <t>This section follows the guidance provided in Section 3.7 of
+      <xref target="RFC9907"/>.</t>
+
+      <t>The YANG modules specified in this document define schemas
       for data that is designed to be accessed via network management
       protocols such as <xref target="RFC6241">NETCONF</xref> or <xref
       target="RFC8040">RESTCONF</xref>. The lowest NETCONF layer is
@@ -766,61 +769,217 @@
       secure transport is <xref target="RFC6242">Secure Shell
       (SSH)</xref>. The lowest RESTCONF layer is HTTPS, and the
       mandatory-to-implement secure transport is <xref
-      target="RFC8446">TLS</xref>. The <xref target="RFC8341">NETCONF
-      Access Control Model (NACM) </xref> provides the means to
-      restrict access for particular NETCONF or RESTCONF users to a
+      target="RFC8446">TLS</xref>.</t>
+
+      <t>Management access to the data nodes defined in these modules
+      SHOULD use secure transport with mutual authentication. For
+      NETCONF, this means SSH with public key authentication or TLS
+      with client certificate authentication. For RESTCONF, this means
+      HTTPS with TLS client authentication. This ensures that both the
+      client and server identities are verified before any
+      configuration or operational data is exchanged.</t>
+
+      <t>The <xref target="RFC8341">Network Configuration Access
+      Control Model (NACM)</xref> provides the means to restrict
+      access for particular NETCONF or RESTCONF users to a
       preconfigured subset of all available NETCONF or RESTCONF
-      protocol operations and content.</t>
+      protocol operations and content. Access control for the
+      configuration data, operational state data, and actions defined
+      in these modules is expected to be enforced using NACM.</t>
 
-      <t>There are a number of data nodes defined in this YANG module
-      that are writable/creatable/deletable (i.e., config true, which
-      is the default).  These data nodes may be considered sensitive
-      or vulnerable in some network environments. Write operations
-      (e.g., edit-config) to these data nodes without proper
-      protection can have a negative effect on network
-      operations. Some of the subtrees and data nodes and their
-      sensitivity/vulnerability are described here.</t>
+      <section title="ietf-qos-types Module">
+        <t>The ietf-qos-types module defines only identities, typedefs,
+        and features. It does not define any configuration or
+        operational state data nodes. However, the identities and
+        features defined in this module affect which data nodes appear
+        in the other QoS modules. Access to features and the ability
+        to derive new identities should be controlled as part of the
+        overall YANG module management.</t>
+      </section>
 
-      <t>- 'filter-operation' and 'filter'. 'filter-operation'
-      includes the ability to 'match all', which is a logical AND
-      operation or 'match any', which is a logical OR operation. Both
-      the operations have an impact on the traffic that is being
-      classified. Similarly, the 'filter' list decides what parts of
-      the packet will examined, which will also impact the traffic
-      that is being classified.</t>
+      <section title="Writable Data Nodes">
+        <t>There are a number of data nodes defined in these YANG
+        modules that are writable/creatable/deletable (i.e., config
+        true, which is the default). These data nodes may be
+        considered sensitive or vulnerable in some network
+        environments. Write operations (e.g., edit-config) to these
+        data nodes without proper protection can have a negative
+        effect on network operations. The following subtrees and data
+        nodes have particular sensitivity:</t>
 
-      <t>- 'action'. The 'action' decides what action will be taken on
-      the packet. That includes whether the packet will be marked,
-      queued, or just discarded.</t>
+        <t><list style="symbols">
+          <t>/if:interfaces/if:interface/qos-target-policy (in
+          ietf-traffic-policy): This binds a QoS policy to an
+          interface in a specific direction. Unauthorized creation,
+          modification, or deletion of entries can remove traffic
+          treatment from interfaces, causing service degradation or
+          denial of service.</t>
 
-      <t>Some of the readable data nodes in this YANG module may be
-      considered sensitive or vulnerable in some network
-      environments. It is thus important to control read access (e.g.,
-      via get, get-config, or notification) to these data nodes. Some
-      of the subtrees and data nodes and their
-      sensitivity/vulnerability are:</t>
+          <t>/policies/policy/classifier/action with type 'discard':
+          The discard action causes matched packets to be dropped.
+          Misconfiguration or unauthorized modification can cause
+          denial of service by dropping legitimate traffic.</t>
 
-      <t>- 'conform-pkts', 'conform-bytes', 'exceed-pkts',
-      'exceed-bytes', 'voilate-pkts' or 'voilate-bytes'. All these
-      statistics combined with their 'meter-id' are an indication of
-      what is happening in the network, and can allow for an intruder
-      insight into how to disrupt the traffic.</t>
+          <t>/policies/policy/classifier/action with dscp-marking or
+          traffic-group-marking: DSCP remarking can be used for
+          theft-of-service attacks as described in Section 6 of <xref
+          target="RFC2475"/>. Unauthorized modification of marking
+          actions can cause traffic to receive inappropriate treatment
+          within a DiffServ domain.</t>
 
-      <t>- 'tail-drop-pkts', 'red-drop-bytes', 'wred-stats' are
-      examples of statistics that indicate the kind of traffic that is
-      being profiled for drop or marked for Explicit Congestion
-      Notification (ECN), and can give an insight into the operation
-      of a network.</t>
+          <t>Meter rate parameters (committed-information-rate,
+          peak-information-rate, committed-burst-size,
+          peak-burst-size, excess-burst-size in ietf-qos-action):
+          These parameters determine what traffic is treated as
+          conforming versus exceeding or violating. Unauthorized
+          modification can cause legitimate traffic to be dropped or
+          remarked, resulting in service degradation.</t>
 
-      <t>Some of the RPC operations in this YANG module may be
-      considered sensitive or vulnerable in some network
-      environments. It is thus important to control access to these
-      operations. These are the operations and their
-      sensitivity/vulnerability:</t>
+          <t>filter-operation and filter lists: These determine which
+          traffic is classified and how. Modification can change
+          traffic treatment unexpectedly.</t>
 
-      <t>- The model allows for statistics to be cleared by the
-      'clear' RPC operation, causing all the individual statistics to
-      be cleared.</t>
+          <t>child-policy references: Hierarchical policy references
+          can create complex policy chains. The modules enforce that
+          self-references and cyclic references are rejected, but
+          unauthorized modification of child-policy bindings can still
+          affect traffic treatment.</t>
+        </list></t>
+      </section>
+
+      <section title="Readable Data Nodes">
+        <t>Some of the readable data nodes in these YANG modules may
+        be considered sensitive or vulnerable in some network
+        environments. It is thus important to control read access
+        (e.g., via get, get-config, or notification) to these data
+        nodes.</t>
+
+        <section title="Configuration Data">
+          <t>Configuration data readable via get-config or RESTCONF
+          GET may reveal sensitive information about network policy
+          and structure:</t>
+
+          <t><list style="symbols">
+            <t>/classifiers/classifier/filter/* and
+            /policies/policy/classifier/inline/filter/*: The DiffServ
+            filter parameters (source/destination prefixes, port
+            ranges, protocol numbers, DSCP values) reveal which
+            traffic the operator considers important enough to
+            classify. This information could help an attacker craft
+            traffic to evade or exploit classification rules.</t>
+
+            <t>/policies/policy/classifier/action/*: Action
+            configurations reveal how classified traffic is treated,
+            which could inform theft-of-service or denial-of-service
+            attacks.</t>
+
+            <t>/if:interfaces/if:interface/qos-target-policy: Reveals
+            which policies are applied to which interfaces and in
+            which direction.</t>
+
+            <t>/meters/meter/* and /queues/queue/*: Meter and queue
+            configurations reveal rate limits and queue parameters
+            that could inform traffic injection attacks.</t>
+          </list></t>
+        </section>
+
+        <section title="Operational State Data">
+          <t>The ietf-qos-oper module defines operational statistics
+          that may reveal sensitive information:</t>
+
+          <t><list style="symbols">
+            <t>classified-pkts, classified-bytes, classified-rate (in
+            /if:interfaces/if:interface/qos-interface-statistics
+            /stats-per-direction/classifier/*): These counters reveal
+            which classifiers are matching traffic and at what rate.
+            An attacker who can inject traffic and read these counters
+            could infer policy structure by observing which
+            classifiers match injected probe traffic.</t>
+
+            <t>conform-pkts, conform-bytes, exceed-pkts, exceed-bytes,
+            violate-pkts, violate-bytes (in .../meter/*): These
+            metering statistics combined with meter-id indicate
+            traffic patterns and policy effectiveness, potentially
+            revealing how to craft traffic to avoid policing.</t>
+
+            <t>queue-current-size-bytes, queue-average-size-bytes,
+            queue-peak-size-bytes (in .../queue/*): These provide
+            real-time visibility into link congestion state, which
+            could inform timing-based attacks or reveal network
+            capacity information.</t>
+
+            <t>red-statistics (including drop-pkts, drop-bytes,
+            ecn-marked-pkts, ecn-marked-bytes) and wred-stats:
+            Indicate traffic being profiled for drop or ECN marking,
+            revealing congestion patterns and drop policy
+            effectiveness.</t>
+
+            <t>tail-drop-pkts, tail-drop-bytes: Indicate queue
+            overflow conditions and congestion.</t>
+
+            <t>policy-name (in .../stats-per-direction): This
+            unconstrained string value may contain operator-assigned
+            names that include customer-identifying or
+            topology-revealing information.</t>
+          </list></t>
+        </section>
+      </section>
+
+      <section title="Actions">
+        <t>The ietf-qos-oper module defines one action that may be
+        considered sensitive:</t>
+
+        <t><list style="symbols">
+          <t>clear (in /if:interfaces/if:interface
+          /qos-interface-statistics): This action resets QoS
+          statistics counters to zero. Unauthorized invocation can
+          disrupt operational monitoring, hide evidence of traffic
+          anomalies or attacks, and interfere with capacity planning
+          or SLA verification. The action is marked with
+          nacm:default-deny-all, meaning NACM will deny invocation
+          unless an explicit rule permits it. Operators should
+          configure appropriate NACM invoke rules to control which
+          users may clear counters.</t>
+        </list></t>
+
+        <t>Note that 'clear' is a YANG action (not an RPC), so NACM
+        access control is based on the data node path where the action
+        is defined, not an rpc-name rule.</t>
+      </section>
+
+      <section title="Augmented Modules">
+        <t>The ietf-traffic-policy and ietf-qos-oper modules augment
+        /if:interfaces/if:interface from <xref target="RFC8343"/>.
+        The security considerations of RFC 8343 apply to the augmented
+        interface data. In particular, the ability to modify
+        qos-target-policy affects traffic treatment on the interface,
+        and the ability to read qos-interface-statistics reveals
+        operational information about traffic on the interface.</t>
+      </section>
+
+      <section title="DiffServ-Specific Considerations">
+        <t>Section 6 of <xref target="RFC2475"/> describes security
+        considerations for Differentiated Services that are relevant
+        to this model:</t>
+
+        <t><list style="symbols">
+          <t>Theft of service: DSCP remarking can be used to obtain
+          better service than authorized. The marking actions in this
+          model (dscp-marking, traffic-group-marking) should be
+          protected to prevent unauthorized remarking.</t>
+
+          <t>Denial of service: Marking or classifying traffic
+          inappropriately can cause legitimate traffic to be dropped
+          or delayed. The discard action and meter configurations
+          should be protected.</t>
+
+          <t>DiffServ domain trust boundaries: Traffic entering a
+          DiffServ domain may need remarking at the boundary. The
+          qos-target-policy binding determines where policies are
+          applied and should be protected to maintain domain
+          integrity.</t>
+        </list></t>
+      </section>
     </section>
 
     <section anchor="ack" title="Acknowledgement">
@@ -880,9 +1039,11 @@
 
       &RFC8174;
 
+      <?rfc include='reference.RFC.8341.xml'?>
       <?rfc include='reference.RFC.8342.xml'?>
       <?rfc include='reference.RFC.8343.xml'?>
       <?rfc include='reference.RFC.8436.xml'?>
+      <?rfc include='reference.RFC.9907.xml'?>
     </references>
 
     <references title="Informative References">
@@ -895,7 +1056,6 @@
       <?rfc include='reference.RFC.6242.xml'?>
       <?rfc include='reference.RFC.8040.xml'?>
       <?rfc include='reference.RFC.8340.xml'?>
-      <?rfc include='reference.RFC.8341.xml'?>
       <?rfc include='reference.RFC.8446.xml'?>
     </references>
 
