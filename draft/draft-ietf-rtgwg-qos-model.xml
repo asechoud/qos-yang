@@ -941,10 +941,6 @@
           configure appropriate NACM invoke rules to control which
           users may clear counters.</t>
         </list></t>
-
-        <t>Note that 'clear' is a YANG action (not an RPC), so NACM
-        access control is based on the data node path where the action
-        is defined, not an rpc-name rule.</t>
       </section>
 
       <section title="Augmented Modules">
